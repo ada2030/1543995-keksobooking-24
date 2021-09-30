@@ -1,28 +1,23 @@
-const getRandomNumber = function (from, to) {
+const getRandomNumber = (from, to) => {
   if (from <=0 || to <= 0) {
-    console.log('Диапазон должен быть выше нуля');
-    return;
+    throw new Error('Диапазон должен быть выше нуля');
   }
   if (from >= to) {
-    console.log('Минимальное число должно быть меньше чем максимальное');
-    return;
+    throw new Error('Минимальное число должно быть меньше чем максимальное');
   }
   return Math.floor(Math.random() * (to - from + 1)) + from;
-}
+};
 
-console.log(getRandomNumber(4, 5));
+getRandomNumber(4, 5);
 
-const getRandomCoordinates = function (from, to, floatNumber) {
+const getRandomFloatingPointNumber = (from, to, floatNumber) => {
   if (from < 0 || to < 0) {
-    console.log('Диапазон должен быть выше нуля');
-    return;
+    throw new Error('Диапазон должен быть выше нуля');
   }
   if (from >= to) {
-    console.log('Минимальное число должно быть меньше чем максимальное');
-    return;
+    throw new Error('Минимальное число должно быть меньше чем максимальное');
   }
-  let result = Math.random() * (to - from + 1) + from;
-  return result.toFixed(floatNumber);
-}
+  return Math.random() * (to - from + 1) + from.toFixed(floatNumber);
+};
 
-console.log(getRandomCoordinates(4, 5, 2));
+getRandomFloatingPointNumber(4, 5, 2);
