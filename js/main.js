@@ -102,5 +102,8 @@ const mainArray = () => {
   return Array.from({length: 1}, getAuthor).concat(Array.from({length: 1}, getOffer).concat(Array.from({length: 1}, getLocation)));
 };
 
-const SIMILAR_ANNOUNCEMENT = Array.from({length: SIMILAR_COUNT}, mainArray);
-SIMILAR_ANNOUNCEMENT();
+const getSimilarAnnouncements = () => {
+  return Array.from({length: SIMILAR_COUNT}, mainArray);
+};
+
+getSimilarAnnouncements();
