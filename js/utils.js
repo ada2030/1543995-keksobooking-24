@@ -12,11 +12,11 @@ function getRandomPositiveInteger (a, b) {
   return Math.floor(result);
 }
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length)];
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
 const getArray = (elements) => {
   const randomArray = [];
-  for (let i = 0; i < getRandomPositiveInteger(1, 6); i++) {
+  for (let i = 0; i < getRandomPositiveInteger(1, elements.length); i++) {
     randomArray[i] = elements[i];
   }
   return randomArray;
