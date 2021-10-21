@@ -46,6 +46,10 @@ if (roomsSelect.value === '1') {
   allGuests.value = 0;
 }
 
+guests.forEach((guest) => {
+  guest.classList.add('hidden');
+});
+
 allRooms.forEach((rooms) => {
   rooms.addEventListener('change', () => {
     if (rooms.value === '1') {
@@ -90,3 +94,4 @@ allRooms.forEach((rooms) => {
     }
   });
 });
+// мне кажется я сильно усложнил себе задачу:), но как говорится все работает))
