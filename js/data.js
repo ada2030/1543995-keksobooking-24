@@ -19,7 +19,7 @@ const TYPE = [
   'palace',
   'flat',
   'house',
-  'bungalow.',
+  'bungalow',
   'hotel',
 ];
 
