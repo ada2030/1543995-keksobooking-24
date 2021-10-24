@@ -1,14 +1,13 @@
+import {getError} from './utils.js';
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
 
+const form = document.querySelector('.ad-form');
 const titleInput = document.querySelector('#title');
 const priceInput = document.querySelector('#price');
 const roomsSelect = document.querySelector('#room_number');
-const allRooms = document.querySelectorAll('#room_number');
-const allGuests = document.querySelector('#capacity');
-const guests = allGuests.querySelectorAll('option');
-
+const guestsSelect = document.querySelector('#capacity');
 
 titleInput.addEventListener('input', () => {
   const valueLength = titleInput.value.length;
@@ -36,62 +35,15 @@ priceInput.addEventListener('input', () => {
   priceInput.reportValidity();
 });
 
-if (roomsSelect.value === '1') {
-  allGuests.value = 1;
-} else if (roomsSelect.value === '2') {
-  allGuests.value = 2;
-} else if (roomsSelect.value === '3') {
-  allGuests.value = 3;
-} else if (roomsSelect.value === '100') {
-  allGuests.value = 0;
-}
-
-guests.forEach((guest) => {
-  guest.classList.add('hidden');
+form.addEventListener('submit', (evt) => {
+  const roomsValue = Number(roomsSelect.value);
+  const guestValue = Number(guestsSelect.value);
+  if (roomsValue === 100 && guestValue !== 0) {
+    evt.preventDefault();
+    getError('100 комнат не для гостей');
+  } else if (roomsSelect.value < guestsSelect.value) {
+    evt.preventDefault();
+    getError('Количество гостей не может быть больше количества комнат');
+  }
 });
 
-allRooms.forEach((rooms) => {
-  rooms.addEventListener('change', () => {
-    if (rooms.value === '1') {
-      allGuests.value = 1;
-      guests.forEach((guest) => {
-        if (guest.value > rooms.value) {
-          guest.classList.add('hidden');
-        } else if (guest.value === '0') {
-          guest.classList.add('hidden');
-        } else {
-          guest.classList.remove('hidden');
-        }
-      });
-    } else if (rooms.value === '2') {
-      allGuests.value = 2;
-      guests.forEach((guest) => {
-        guest.classList.remove('hidden');
-        if (guest.value > rooms.value) {
-          guest.classList.add('hidden');
-        } else if (guest.value === '0') {
-          guest.classList.add('hidden');
-        }
-      });
-    } else if (rooms.value === '3') {
-      allGuests.value = 3;
-      guests.forEach((guest) => {
-        guest.classList.remove('hidden');
-        if (guest.value > rooms.value) {
-          guest.classList.add('hidden');
-        } else if (guest.value === '0') {
-          guest.classList.add('hidden');
-        }
-      });
-    } else if (rooms.value === '100') {
-      allGuests.value = 0;
-      guests.forEach((guest) => {
-        guest.classList.add('hidden');
-        if (guest.value === '0') {
-          guest.classList.remove('hidden');
-        }
-      });
-    }
-  });
-});
-// мне кажется я сильно усложнил себе задачу:), но как говорится все работает))
