@@ -22,12 +22,20 @@ const getArray = (elements) => {
   return randomArray;
 };
 
-const hiddenElement = (element) => {
-  element.classList.add('hidden');
+const addClass = (element, className) => {
+  element.classList.add(className);
 };
 
-const visibleElement = (element) => {
-  element.classList.remove('hidden');
+const removeClass = (element, className) => {
+  element.classList.remove(className);
+};
+
+const disableElement = (element) => {
+  element.setAttribute('disabled', 'disabled');
+};
+
+const turnOnElement = (element) => {
+  element.removeAttribute('disabled', 'disabled');
 };
 
 const getError = (message) => {
@@ -39,10 +47,10 @@ const getError = (message) => {
   errorMessage.innerHTML = '';
   errorMessage.textContent = message;
   main.appendChild(error);
-  visibleElement(error);
+  removeClass(error, 'hidden');
   errorButton.addEventListener('click', () => {
-    hiddenElement(error);
+    addClass(error, 'hidden');
   });
 };
 
-export {getRandomPositiveFloat, getRandomPositiveInteger, getRandomArrayElement, getArray, getError};
+export {getRandomPositiveFloat, getRandomPositiveInteger, getRandomArrayElement, getArray, getError, addClass, removeClass, disableElement, turnOnElement};
