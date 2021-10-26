@@ -1,13 +1,18 @@
-import {getError} from './utils.js';
+import {getError, addClass, removeClass, disableElement, turnOnElement} from './utils.js';
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
 
 const form = document.querySelector('.ad-form');
+const interactiveElements = form.querySelectorAll('.ad-form__element');
 const titleInput = document.querySelector('#title');
 const priceInput = document.querySelector('#price');
 const roomsSelect = document.querySelector('#room_number');
 const guestsSelect = document.querySelector('#capacity');
+
+const formFilters = document.querySelector('.map__filters');
+const mapFilters = formFilters.querySelectorAll('.map__filter');
+const mapFeatures = formFilters.querySelector('.map__features');
 
 titleInput.addEventListener('input', () => {
   const valueLength = titleInput.value.length;
@@ -47,3 +52,27 @@ form.addEventListener('submit', (evt) => {
   }
 });
 
+addClass(form, 'ad-form--disabled');
+interactiveElements.forEach((element) => {
+  disableElement(element);
+});
+
+addClass(formFilters, 'map__filters--disabled');
+mapFilters.forEach((element) => {
+  disableElement(element);
+});
+disableElement(mapFeatures);
+
+const activateForm = () => {
+  removeClass(form, 'ad-form--disabled');
+  interactiveElements.forEach((element) => {
+    turnOnElement(element);
+  });
+  removeClass(formFilters, 'map__filters--disabled');
+  mapFilters.forEach((element) => {
+    turnOnElement(element);
+  });
+  turnOnElement(mapFeatures);
+};
+
+activateForm();
