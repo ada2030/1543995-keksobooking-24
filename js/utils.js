@@ -30,12 +30,12 @@ const removeClass = (element, className) => {
   element.classList.remove(className);
 };
 
-const disableElement = (element) => {
-  element.setAttribute('disabled', 'disabled');
+const setAttribute = (element, name, value) => {
+  element.setAttribute(name, value);
 };
 
-const turnOnElement = (element) => {
-  element.removeAttribute('disabled', 'disabled');
+const removeAttribute = (element, name, value) => {
+  element.removeAttribute(name, value);
 };
 
 const getError = (message) => {
@@ -53,4 +53,4 @@ const getError = (message) => {
   });
 };
 
-export {getRandomPositiveFloat, getRandomPositiveInteger, getRandomArrayElement, getArray, getError, addClass, removeClass, disableElement, turnOnElement};
+export {getRandomPositiveFloat, getRandomPositiveInteger, getRandomArrayElement, getArray, getError, addClass, removeClass, setAttribute, removeAttribute};

@@ -1,9 +1,10 @@
-import {getError, addClass, removeClass, disableElement, turnOnElement} from './utils.js';
+import {getError, addClass, removeClass, setAttribute, removeAttribute} from './utils.js';
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
 
 const form = document.querySelector('.ad-form');
+const container = document.querySelector('.map__canvas');
 const interactiveElements = form.querySelectorAll('.ad-form__element');
 const titleInput = document.querySelector('#title');
 const priceInput = document.querySelector('#price');
@@ -32,7 +33,7 @@ priceInput.addEventListener('input', () => {
   const priceValue = priceInput.value;
 
   if (priceValue > MAX_PRICE) {
-    priceInput.setCustomValidity(`Цена за ночь не может быть выше ${  MAX_PRICE } рублей`);
+    priceInput.setCustomValidity(`Цена за ночь не может быть выше ${MAX_PRICE} рублей`);
   } else {
     priceInput.setCustomValidity('');
   }
@@ -52,27 +53,30 @@ form.addEventListener('submit', (evt) => {
   }
 });
 
-addClass(form, 'ad-form--disabled');
-interactiveElements.forEach((element) => {
-  disableElement(element);
-});
-
-addClass(formFilters, 'map__filters--disabled');
-mapFilters.forEach((element) => {
-  disableElement(element);
-});
-disableElement(mapFeatures);
+const disabledForm = () => {
+  addClass(form, 'ad-form--disabled');
+  interactiveElements.forEach((element) => {
+    setAttribute(element, 'disabled', 'disabled');
+  });
+  addClass(formFilters, 'map__filters--disabled');
+  mapFilters.forEach((element) => {
+    setAttribute(element, 'disabled', 'disabled');
+  });
+  setAttribute(mapFeatures, 'disabled', 'disabled');
+  addClass(container, 'hidden');
+};
+disabledForm();
 
 const activateForm = () => {
   removeClass(form, 'ad-form--disabled');
   interactiveElements.forEach((element) => {
-    turnOnElement(element);
+    removeAttribute(element, 'disabled', 'disabled');
   });
   removeClass(formFilters, 'map__filters--disabled');
   mapFilters.forEach((element) => {
-    turnOnElement(element);
+    removeAttribute(element, 'disabled', 'disabled');
   });
-  turnOnElement(mapFeatures);
+  removeAttribute(mapFeatures, 'disabled', 'disabled');
+  removeClass(container, 'hidden');
 };
-
 activateForm();
