@@ -1,7 +1,3 @@
-import {mainArray} from './data.js';
-
-const randomData = mainArray;
-const container = document.querySelector('.map__canvas');
 const template = document.querySelector('#card').content.querySelector('.popup');
 const templatePhoto = document.querySelector('#card').content.querySelector('.popup__photo');
 
@@ -40,12 +36,12 @@ const appendData = (data) => {
   } else {
     element.querySelector('.popup__type').textContent = data.offer.type;
   }
-  if (data.offer.rooms === undefined | data.offer.guests === undefined) {
+  if (data.offer.rooms === undefined || data.offer.guests === undefined) {
     element.querySelector('.popup__text--capacity').classList.add('hidden');
   } else {
     element.querySelector('.popup__text--capacity').textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
   }
-  if (data.offer.checkin === undefined | data.offer.checkout === undefined) {
+  if (data.offer.checkin === undefined || data.offer.checkout === undefined) {
     element.querySelector('.popup__text--time').classList.add('hidden');
   } else {
     element.querySelector('.popup__text--time').textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
@@ -74,9 +70,7 @@ const appendData = (data) => {
   } else {
     element.querySelector('.popup__avatar').src = data.author.avatar;
   }
-  container.appendChild(element);
+  return element;
 };
 
-appendData(randomData[0]);
-
-
+export {appendData};
