@@ -1,6 +1,7 @@
 const template = document.querySelector('#card').content.querySelector('.popup');
 const templatePhoto = document.querySelector('#card').content.querySelector('.popup__photo');
 
+// функция ставки данных в шаблон
 const appendData = (data) => {
   const element = template.cloneNode(true);
   const containerPhotos = element.querySelector('.popup__photos');
