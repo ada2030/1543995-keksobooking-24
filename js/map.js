@@ -1,15 +1,14 @@
-import {setAttribute} from './utils.js';
-import {mainArray} from './data.js';
-import {appendData} from './markup.js';
-const randomData = mainArray;
+import {activateForm} from './form.js';
+import {setAttributeOrRemoveAttribute} from './utils.js';
+
 const addressInput = document.querySelector('#address');
 
-const map = L.map('map-canvas')
-  .setView({
-    lat: 35.69399,
-    lng: 139.76023,
-  }, 10);
+// отрисовка карты после события load
+const map = L.map('map-canvas');
+map.on('load', activateForm);
+map.setView({lat: 35.69399, lng: 139.76023}, 10);
 
+// подтягивание ресурсов
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -17,18 +16,14 @@ L.tileLayer(
   },
 ).addTo(map);
 
+// замена иконки метки
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
 
-const icon = L.icon({
-  iconUrl: 'img/pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
-});
-
+// опции основной метки
 const mainMarker = L.marker(
   {
     lat: 35.69399,
@@ -41,13 +36,15 @@ const mainMarker = L.marker(
 );
 mainMarker.addTo(map);
 
+// изначальные координаты метки
 let coordinates = {
   lat: 35.69399,
   lng: 139.76023,
 };
 addressInput.value = `${coordinates.lat}, ${coordinates.lng}`;
-setAttribute(addressInput,'disabled', 'disabled');
+setAttributeOrRemoveAttribute(addressInput, 'set','value', `${coordinates.lat}, ${coordinates.lng}`);
 
+// обработка события измениния координатов метки
 mainMarker.on('moveend', (evt) => {
   coordinates = {
     lat: evt.target.getLatLng().lat.toFixed(5),
@@ -56,16 +53,17 @@ mainMarker.on('moveend', (evt) => {
   addressInput.value = `${coordinates.lat}, ${coordinates.lng}`;
 });
 
-randomData.forEach((data) => {
-  const marker = L.marker({
-    lat: data.location.lat,
-    lng: data.location.lng,
-  },
-  {
-    icon: icon,
+// функция возвращения в исходное положение
+const resetMapAndMarker = () => {
+  mainMarker.setLatLng({
+    lat: 35.69399,
+    lng: 139.76023,
   });
-  marker
-    .addTo(map)
-    .bindPopup(appendData(data));
-});
+  map.setView({
+    lat: 35.69399, lng: 139.76023}, 10);
+  map.closePopup();
+};
+
+export {map, resetMapAndMarker};
+
 
