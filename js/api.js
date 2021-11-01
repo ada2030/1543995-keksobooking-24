@@ -12,7 +12,7 @@ const getData = (onSuccess, onFail) => {
 // функция отправки данных
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://24.javascript.pages.academy/keksobookings',
+    'https://24.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
       body,
