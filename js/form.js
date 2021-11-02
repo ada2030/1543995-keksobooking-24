@@ -134,7 +134,7 @@ const setUserFormSubmit = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
-      'https://24.javascript.pages.academy/keksobookings',
+      'https://24.javascript.pages.academy/keksobooking',
       () => onSuccess(),
       () => getError('Не удалось отправить форму. Попробуйте ещё раз'),
       new FormData(evt.target),
