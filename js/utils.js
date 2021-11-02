@@ -1,3 +1,4 @@
+// функция получение рандомного числа с плавающей запятой
 function getRandomPositiveFloat (a, b, digits = 1) {
   const lower = Math.min(Math.abs(a), Math.abs(b));
   const upper = Math.max(Math.abs(a), Math.abs(b));
@@ -5,6 +6,7 @@ function getRandomPositiveFloat (a, b, digits = 1) {
   return result.toFixed(digits);
 }
 
+// функция получение рандомного числа
 function getRandomPositiveInteger (a, b) {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
@@ -12,32 +14,17 @@ function getRandomPositiveInteger (a, b) {
   return Math.floor(result);
 }
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-
-const getArray = (elements) => {
-  const randomArray = [];
-  for (let i = 0; i < getRandomPositiveInteger(1, elements.length); i++) {
-    randomArray[i] = elements[i];
-  }
-  return randomArray;
+// функция добавления и удаления класса
+const addClassOrRemoveClass = (element, addOrRemove, className) => {
+  element.classList[addOrRemove === 'add' ? 'add' : 'remove'](className);
 };
 
-const addClass = (element, className) => {
-  element.classList.add(className);
+// функция добавления и удаления атрибута
+const setAttributeOrRemoveAttribute = (element, setOrRemove, name, value) => {
+  element[setOrRemove === 'set' ? 'setAttribute' : 'removeAttribute'](name, value);
 };
 
-const removeClass = (element, className) => {
-  element.classList.remove(className);
-};
-
-const setAttribute = (element, name, value) => {
-  element.setAttribute(name, value);
-};
-
-const removeAttribute = (element, name, value) => {
-  element.removeAttribute(name, value);
-};
-
+// функция получения попапа ошибки
 const getError = (message) => {
   const main = document.querySelector('main');
   const templateError = document.querySelector('#error').content.querySelector('.error');
@@ -47,10 +34,32 @@ const getError = (message) => {
   errorMessage.innerHTML = '';
   errorMessage.textContent = message;
   main.appendChild(error);
-  removeClass(error, 'hidden');
+  addClassOrRemoveClass(error, 'remove', 'hidden');
   errorButton.addEventListener('click', () => {
-    addClass(error, 'hidden');
+    addClassOrRemoveClass(error, 'add', 'hidden');
+  });
+  window.addEventListener('keydown', (evt) => {
+    if (evt.keyCode === 27) {
+      addClassOrRemoveClass(error, 'add', 'hidden');
+    }
   });
 };
 
-export {getRandomPositiveFloat, getRandomPositiveInteger, getRandomArrayElement, getArray, getError, addClass, removeClass, setAttribute, removeAttribute};
+// функция получения попапа успешной отправки данных
+const getSuccess = () => {
+  const main = document.querySelector('main');
+  const templateSuccess = document.querySelector('#success').content.querySelector('.success');
+  const success = templateSuccess.cloneNode(true);
+  main.appendChild(success);
+  addClassOrRemoveClass(success, 'remove', 'hidden');
+  window.addEventListener('keydown', (evt) => {
+    if (evt.keyCode === 27) {
+      addClassOrRemoveClass(success, 'add', 'hidden');
+    }
+  });
+  window.addEventListener('click', () => {
+    addClassOrRemoveClass(success, 'add', 'hidden');
+  });
+};
+
+export {getRandomPositiveFloat, getRandomPositiveInteger, addClassOrRemoveClass, setAttributeOrRemoveAttribute, getError, getSuccess};
