@@ -25,22 +25,21 @@ const setAttributeOrRemoveAttribute = (element, setOrRemove, name, value) => {
 };
 
 // функция получения попапа ошибки
-const getError = (message) => {
+const getError = () => {
   const main = document.querySelector('main');
   const templateError = document.querySelector('#error').content.querySelector('.error');
   const error = templateError.cloneNode(true);
   const errorButton = error.querySelector('.error__button');
-  const errorMessage = error.querySelector('.error__message');
-  errorMessage.innerHTML = '';
-  errorMessage.textContent = message;
   main.appendChild(error);
   addClassOrRemoveClass(error, 'remove', 'hidden');
   errorButton.addEventListener('click', () => {
-    addClassOrRemoveClass(error, 'add', 'hidden');
+    error.remove();
+    window.removeEventListener('keydown', () => {});
   });
   window.addEventListener('keydown', (evt) => {
-    if (evt.keyCode === 27) {
-      addClassOrRemoveClass(error, 'add', 'hidden');
+    if (evt.key === 'Escape') {
+      error.remove();
+      errorButton.removeEventListener('click', () => {});
     }
   });
 };
@@ -53,12 +52,14 @@ const getSuccess = () => {
   main.appendChild(success);
   addClassOrRemoveClass(success, 'remove', 'hidden');
   window.addEventListener('keydown', (evt) => {
-    if (evt.keyCode === 27) {
-      addClassOrRemoveClass(success, 'add', 'hidden');
+    if (evt.key === 'Escape') {
+      success.remove();
+      window.removeEventListener('click', () => {});
     }
   });
   window.addEventListener('click', () => {
-    addClassOrRemoveClass(success, 'add', 'hidden');
+    success.remove();
+    window.removeEventListener('keydown', () => {});
   });
 };
 

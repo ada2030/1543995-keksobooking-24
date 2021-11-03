@@ -1,18 +1,18 @@
 // функция получения данных
-const getData = (onSuccess, onFail) => {
-  fetch('https://24.javascript.pages.academy/keksobooking/data')
+const getData = (url, onSuccess, onFail) => {
+  fetch(url)
     .then((response) => response.json())
     .then((allData) => {
       onSuccess(allData);
     })
     .catch(() => {
-      onFail('Не удалось получить данные. Попробуйте ещё раз');
+      onFail();
     });
 };
 // функция отправки данных
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (url, onSuccess, onFail, body) => {
   fetch(
-    'https://24.javascript.pages.academy/keksobooking',
+    url,
     {
       method: 'POST',
       body,
@@ -22,11 +22,11 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        onFail();
       }
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      onFail();
     });
 };
 
