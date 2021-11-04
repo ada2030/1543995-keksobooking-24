@@ -1,3 +1,11 @@
+const body = document.querySelector('body');
+const main = document.querySelector('main');
+const templateError = document.querySelector('#error').content.querySelector('.error');
+const error = templateError.cloneNode(true);
+const errorButton = error.querySelector('.error__button');
+const templateSuccess = document.querySelector('#success').content.querySelector('.success');
+const success = templateSuccess.cloneNode(true);
+
 // функция получение рандомного числа с плавающей запятой
 function getRandomPositiveFloat (a, b, digits = 1) {
   const lower = Math.min(Math.abs(a), Math.abs(b));
@@ -19,48 +27,33 @@ const addClassOrRemoveClass = (element, addOrRemove, className) => {
   element.classList[addOrRemove === 'add' ? 'add' : 'remove'](className);
 };
 
-// функция добавления и удаления атрибута
-const setAttributeOrRemoveAttribute = (element, setOrRemove, name, value) => {
-  element[setOrRemove === 'set' ? 'setAttribute' : 'removeAttribute'](name, value);
-};
-
 // функция получения попапа ошибки
 const getError = () => {
-  const main = document.querySelector('main');
-  const templateError = document.querySelector('#error').content.querySelector('.error');
-  const error = templateError.cloneNode(true);
-  const errorButton = error.querySelector('.error__button');
   main.appendChild(error);
   addClassOrRemoveClass(error, 'remove', 'hidden');
   errorButton.addEventListener('click', () => {
     error.remove();
-    window.removeEventListener('keydown', () => {});
   });
-  window.addEventListener('keydown', (evt) => {
+  body.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
+      // не очень понял про утилитарную функцию, если тебе не сложно можешь примерчик написать пожалуйста, просто до меня не доходит
       error.remove();
-      errorButton.removeEventListener('click', () => {});
     }
   });
 };
 
 // функция получения попапа успешной отправки данных
 const getSuccess = () => {
-  const main = document.querySelector('main');
-  const templateSuccess = document.querySelector('#success').content.querySelector('.success');
-  const success = templateSuccess.cloneNode(true);
   main.appendChild(success);
   addClassOrRemoveClass(success, 'remove', 'hidden');
-  window.addEventListener('keydown', (evt) => {
+  body.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       success.remove();
-      window.removeEventListener('click', () => {});
     }
   });
-  window.addEventListener('click', () => {
+  body.addEventListener('click', () => {
     success.remove();
-    window.removeEventListener('keydown', () => {});
   });
 };
 
-export {getRandomPositiveFloat, getRandomPositiveInteger, addClassOrRemoveClass, setAttributeOrRemoveAttribute, getError, getSuccess};
+export {getRandomPositiveFloat, getRandomPositiveInteger, addClassOrRemoveClass, getError, getSuccess};

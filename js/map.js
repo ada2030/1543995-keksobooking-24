@@ -1,8 +1,9 @@
 import {activateForm} from './form.js';
-import {setAttributeOrRemoveAttribute} from './utils.js';
 import {appendData} from './markup.js';
+import {getFilterRank, compareData} from './filter.js';
 
 const addressInput = document.querySelector('#address');
+const SIMILAR_WIZARD_COUNT = 10;
 
 // отрисовка карты после события load
 const map = L.map('map-canvas');
@@ -42,8 +43,7 @@ let coordinates = {
   lat: 35.69399,
   lng: 139.76023,
 };
-addressInput.value = `${coordinates.lat}, ${coordinates.lng}`;
-setAttributeOrRemoveAttribute(addressInput, 'set','value', `${coordinates.lat}, ${coordinates.lng}`);
+addressInput.setAttribute('value', `${coordinates.lat}, ${coordinates.lng}`);
 
 // обработка события измениния координатов метки
 mainMarker.on('moveend', (evt) => {
@@ -66,6 +66,8 @@ const resetMapAndMarker = () => {
 };
 
 // функция, которая рисует метки на карте
+
+
 const paintMarker = (allData) => {
   allData.forEach((data) => {
     const icon = L.icon({
