@@ -1,6 +1,6 @@
 import {activateForm} from './form.js';
 import {appendData} from './markup.js';
-import {getFilterRank, compareData} from './filter.js';
+import {compareData} from './filter.js';
 
 const addressInput = document.querySelector('#address');
 const SIMILAR_WIZARD_COUNT = 10;
@@ -66,26 +66,28 @@ const resetMapAndMarker = () => {
 };
 
 // функция, которая рисует метки на карте
-
-
 const paintMarker = (allData) => {
-  allData.forEach((data) => {
-    const icon = L.icon({
-      iconUrl: 'img/pin.svg',
-      iconSize: [52, 52],
-      iconAnchor: [26, 52],
+  allData
+    .slice()
+    .sort(compareData)
+    .slice(0, SIMILAR_WIZARD_COUNT)
+    .forEach(({author, offer, location}) => {
+      const icon = L.icon({
+        iconUrl: 'img/pin.svg',
+        iconSize: [52, 52],
+        iconAnchor: [26, 52],
+      });
+      const marker = L.marker({
+        lat: location.lat,
+        lng: location.lng,
+      },
+      {
+        icon: icon,
+      });
+      marker
+        .addTo(map)
+        .bindPopup(appendData(author, offer));
     });
-    const marker = L.marker({
-      lat: data.location.lat,
-      lng: data.location.lng,
-    },
-    {
-      icon: icon,
-    });
-    marker
-      .addTo(map)
-      .bindPopup(appendData(data));
-  });
 };
 
 export {map, resetMapAndMarker, paintMarker};

@@ -6,7 +6,7 @@ const templatePhoto = document.querySelector('#card').content.querySelector('.po
 const TypeTranslate = {BUNGALOW: 'Бунгало', FLAT: 'Квартира', HOTEL: 'Отель', HOUSE: 'Дом', PALACE: 'Дворец'};
 
 // функция ставки данных в шаблон
-const appendData = (data) => {
+const appendData = (author, offer) => {
   const element = template.cloneNode(true);
   const containerPhotos = element.querySelector('.popup__photos');
   const popupTitle = element.querySelector('.popup__title');
@@ -19,68 +19,67 @@ const appendData = (data) => {
   const popupDescription = element.querySelector('.popup__description');
   const popupPhotos = element.querySelector('.popup__photos');
   const popupAvatar = element.querySelector('.popup__avatar');
-  if (data.offer.title === undefined) {
+  if (offer.title === undefined) {
     addClassOrRemoveClass(popupTitle, 'add', 'hidden');
   } else {
-    popupTitle.textContent = data.offer.title;
+    popupTitle.textContent = offer.title;
   }
-  if (data.offer.address === undefined) {
+  if (offer.address === undefined) {
     addClassOrRemoveClass(popupAddress, 'add', 'hidden');
   } else {
-    popupAddress.textContent = data.offer.address;
+    popupAddress.textContent = offer.address;
   }
-  if (data.offer.price === undefined) {
+  if (offer.price === undefined) {
     addClassOrRemoveClass(popupPrice, 'add', 'hidden');
   } else {
-    popupPrice.textContent = `${data.offer.price} ₽/ночь`;
+    popupPrice.textContent = `${offer.price} ₽/ночь`;
   }
   for (const item in TypeTranslate) {
-    if (item.toLowerCase() === data.offer.type) {
-      data.offer.type = TypeTranslate[item];
+    if (item.toLowerCase() === offer.type) {
+      offer.type = TypeTranslate[item];
     }
   }
-  if (data.offer.type === undefined) {
+  if (offer.type === undefined) {
     addClassOrRemoveClass(popupType, 'add', 'hidden');
   } else {
-    popupType.textContent = data.offer.type;
+    popupType.textContent = offer.type;
   }
-  if (data.offer.rooms === undefined || data.offer.guests === undefined) {
+  if (offer.rooms === undefined || offer.guests === undefined) {
     addClassOrRemoveClass(popupCapacity, 'add', 'hidden');
   } else {
-    popupCapacity.textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
+    popupCapacity.textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
   }
-  if (data.offer.checkin === undefined || data.offer.checkout === undefined) {
+  if (offer.checkin === undefined || offer.checkout === undefined) {
     addClassOrRemoveClass(popupTime, 'add', 'hidden');
   } else {
-    popupTime.textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
+    popupTime.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   }
-  if (data.offer.features === undefined) {
+  if (offer.features === undefined) {
     addClassOrRemoveClass(popupFeatures, 'add', 'hidden');
   } else {
-    popupFeatures.textContent = data.offer.features;
+    popupFeatures.textContent = offer.features;
   }
-  if (data.offer.description === undefined) {
+  if (offer.description === undefined) {
     addClassOrRemoveClass(popupDescription, 'add', 'hidden');
   } else {
-    popupDescription.textContent = data.offer.description;
+    popupDescription.textContent = offer.description;
   }
-  if (data.offer.photos === undefined) {
+  if (offer.photos === undefined) {
     addClassOrRemoveClass(popupPhotos, 'add', 'hidden');
   } else {
-    data.offer.photos.forEach((photo) => {
+    offer.photos.forEach((photo) => {
       const photoItem = templatePhoto.cloneNode(true);
       photoItem.src = photo;
       containerPhotos.innerHTML = '';
       containerPhotos.appendChild(photoItem);
     });
   }
-  if (data.author.avatar === undefined) {
+  if (author.avatar === undefined) {
     addClassOrRemoveClass(popupAvatar, 'add', 'hidden');
   } else {
-    popupAvatar.src = data.author.avatar;
+    popupAvatar.src = author.avatar;
   }
   return element;
 };
-// вроде бы много повторений, но нсли честно вообще без понятий как можно еще упростить((
 
 export {appendData};

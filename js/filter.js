@@ -1,41 +1,86 @@
-
+const formFilters = document.querySelector('.map__filters');
+const allFilters = formFilters.querySelectorAll('.map__filter');
+const featuresFilter = formFilters.querySelector('.map__features');
+const allCheckboxes = featuresFilter.querySelectorAll('input');
 const getFilterRank = (data) => {
-  const formFilters = document.querySelector('.map__filters');
-  const typeFilter = formFilters.querySelector('.housing__type');
-  const priceFilter = formFilters.querySelector('.housing__price');
-  const roomsFilter = formFilters.querySelector('.housing__rooms');
-  const guestsFilter = formFilters.querySelector('.housing__guests');
-
+  const typeFilter = formFilters.querySelector('[name="housing-type"]');
+  const priceFilter = formFilters.querySelector('[name="housing-price"]');
+  const roomsFilter = formFilters.querySelector('[name="housing-rooms"]');
+  const guestsFilter = formFilters.querySelector('[name="housing-guests"]');
+  const featuresItems = featuresFilter.querySelectorAll('input:checked');
+  const TypeTranslate = {
+    BUNGALOW: 'Бунгало',
+    FLAT: 'Квартира',
+    HOTEL: 'Отель',
+    HOUSE: 'Дом',
+    PALACE: 'Дворец',
+  };
+  const PriceRange = {
+    LOW: {
+      MIN: 0,
+      MAX: 10000,
+    },
+    MIDDLE: {
+      MIN: 10000,
+      MAX: 50000,
+    },
+    HIGH: {
+      MIN: 50000,
+      MAX: Infinity,
+    },
+  };
   let rank = 0;
-
-  if (data.offer.type === typeFilter.value) {
+  let typeTranslate;
+  for (const item in TypeTranslate) {
+    if (TypeTranslate[item] === data.offer.type) {
+      typeTranslate = item.toLowerCase();
+    }
+  }
+  if (typeTranslate === typeFilter.value) {
     rank++;
   }
   let priceText;
-  if (data.offer.price < 10000) {
-    priceText = 'low';
-  } else if (data.offer.price > 10000 && data.offer.price < 50000) {
-    priceText = 'middle';
-  } else if (data.offer.price > 50000) {
-    priceText = 'high';
+  for (const item in PriceRange) {
+    if (data.offer.price > PriceRange[item].MIN && data.offer.price < PriceRange[item].MAX) {
+      priceText = item.toLowerCase();
+    }
   }
   if (priceText === priceFilter.value) {
     rank++;
   }
-  if (data.offer.rooms === roomsFilter.value) {
+  if (data.offer.rooms === Number(roomsFilter.value)) {
     rank++;
   }
-  if (data.offer.guests === guestsFilter.value) {
+  if (data.offer.guests === Number(guestsFilter.value)) {
     rank++;
   }
-
+  for (const featureData in data.offer.features) {
+    featuresItems.forEach((item) => {
+      if (data.offer.features[featureData] === item.value) {
+        rank += 0.5;
+      }
+    });
+  }
   return rank;
 };
 
 const compareData = (dataA, dataB) => {
   const rankA = getFilterRank(dataA);
   const rankB = getFilterRank(dataB);
-
   return rankB - rankA;
 };
-export {getFilterRank, compareData};
+
+const changeFilters = (cb) => {
+  allFilters.forEach((item) => {
+    item.addEventListener('change', () => {
+      cb();
+    });
+  });
+  allCheckboxes.forEach((item) => {
+    item.addEventListener('change', () => {
+      cb();
+    });
+  });
+};
+
+export {compareData, changeFilters};
