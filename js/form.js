@@ -1,9 +1,10 @@
-import {addClassOrRemoveClass, setAttributeOrRemoveAttribute, getError, getSuccess} from './utils.js';
+import {addClassOrRemoveClass, getError, getSuccess} from './utils.js';
 import {sendData} from './api.js';
 import {resetMapAndMarker} from './map.js';
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
+const MinPriceByType = {BUNGALOW: 0, FLAT: 1000, HOTEL: 3000, HOUSE: 5000, PALACE: 10000};
 
 const form = document.querySelector('.ad-form');
 const formButton = form.querySelector('.ad-form__submit');
@@ -59,84 +60,64 @@ formButton.addEventListener('click', () => {
 });
 
 // валидация тип жилья и цены до события
-if (typeSelect.value === 'bungalow') {
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 0);
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 0);
-} else if (typeSelect.value === 'flat') {
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 1000);
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 1000);
-} else if (typeSelect.value === 'hotel') {
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 3000);
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 3000);
-} else if (typeSelect.value === 'house') {
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 5000);
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 5000);
-} else if (typeSelect.value === 'palace') {
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 10000);
-  setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 10000);
+for (const item in MinPriceByType) {
+  if (item.toLowerCase() === typeSelect.value) {
+    priceInput.min = MinPriceByType[item];
+    priceInput.placeholder = MinPriceByType[item];
+  }
 }
 
 // валидация тип жилья и цены при событии
 typeSelect.addEventListener('change', () => {
-  const typeValue = typeSelect.value;
-  if (typeValue === 'bungalow') {
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 0);
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 0);
-  } else if (typeValue === 'flat') {
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 1000);
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 1000);
-  } else if (typeValue === 'hotel') {
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 3000);
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 3000);
-  } else if (typeValue === 'house') {
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 5000);
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 5000);
-  } else if (typeValue === 'palace') {
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'placeholder', 10000);
-    setAttributeOrRemoveAttribute(priceInput, 'set', 'min', 10000);
+  for (const item in MinPriceByType) {
+    if (item.toLowerCase() === typeSelect.value) {
+      priceInput.min = MinPriceByType[item];
+      priceInput.placeholder = MinPriceByType[item];
+    }
   }
 });
 
 // валидация Время заезда и выезда
 timeInSelect.addEventListener('change', () => {
-  const timeInValue = timeInSelect.value;
-  if (timeInValue === '12:00') {
-    timeOutSelect.value = '12:00';
-  } else if (timeInValue === '13:00') {
-    timeOutSelect.value = '13:00';
-  } else if (timeInValue === '14:00') {
-    timeOutSelect.value = '14:00';
-  }
+  timeOutSelect.value = timeInSelect.value;
 });
 timeOutSelect.addEventListener('change', () => {
-  const timeOutValue = timeOutSelect.value;
-  if (timeOutValue === '12:00') {
-    timeInSelect.value = '12:00';
-  } else if (timeOutValue === '13:00') {
-    timeInSelect.value = '13:00';
-  } else if (timeOutValue === '14:00') {
-    timeInSelect.value = '14:00';
-  }
+  timeInSelect.value = timeOutSelect.value;
 });
 
 // приведение форм в неактивное состояние
 addClassOrRemoveClass(form, 'add', 'ad-form--disabled');
 interactiveElements.forEach((element) => {
-  setAttributeOrRemoveAttribute(element, 'set','disabled', 'disabled');
+  element.disabled = 'disabled';
 });
 addClassOrRemoveClass(formFilters, 'add', 'map__filters--disabled');
 mapFilters.forEach((element) => {
-  setAttributeOrRemoveAttribute(element, 'set','disabled', 'disabled');
+  element.disabled = 'disabled';
 });
-setAttributeOrRemoveAttribute(mapFeatures, 'set','disabled', 'disabled');
+mapFeatures.disabled = 'disabled';
 
+// функция переключения формы в активное состояние
+const activateForm = () => {
+  addClassOrRemoveClass(form, 'remove', 'ad-form--disabled');
+  interactiveElements.forEach((element) => {
+    element.disabled = '';
+  });
+  addClassOrRemoveClass(formFilters, 'remove', 'map__filters--disabled');
+  mapFilters.forEach((element) => {
+    element.disabled = '';
+  });
+  mapFeatures.disabled = '';
+  addClassOrRemoveClass(container, 'remove', 'hidden');
+};
+
+// функция обработки события submit
 const setUserFormSubmit = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
       'https://24.javascript.pages.academy/keksobooking',
       () => onSuccess(),
-      () => getError('Не удалось отправить форму. Попробуйте ещё раз'),
+      () => getError(),
       new FormData(evt.target),
     );
   });
@@ -159,19 +140,5 @@ resetButton.addEventListener('click', (evt) => {
 });
 
 setUserFormSubmit(getInitial);
-
-// функция переключения формы в активное состояние
-const activateForm = () => {
-  addClassOrRemoveClass(form, 'remove', 'ad-form--disabled');
-  interactiveElements.forEach((element) => {
-    setAttributeOrRemoveAttribute(element, 'remove','disabled', 'disabled');
-  });
-  addClassOrRemoveClass(formFilters, 'remove', 'map__filters--disabled');
-  mapFilters.forEach((element) => {
-    setAttributeOrRemoveAttribute(element, 'remove','disabled', 'disabled');
-  });
-  setAttributeOrRemoveAttribute(mapFeatures, 'remove','disabled', 'disabled');
-  addClassOrRemoveClass(container, 'remove', 'hidden');
-};
 
 export {activateForm};
