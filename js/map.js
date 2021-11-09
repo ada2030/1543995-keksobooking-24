@@ -66,7 +66,9 @@ const resetMapAndMarker = () => {
 };
 
 // функция, которая рисует метки на карте
+const markerGroup = L.layerGroup().addTo(map);
 const paintMarker = (allData) => {
+  markerGroup.clearLayers();
   allData
     .slice()
     .sort(compareData)
@@ -85,7 +87,7 @@ const paintMarker = (allData) => {
         icon: icon,
       });
       marker
-        .addTo(map)
+        .addTo(markerGroup)
         .bindPopup(appendData(author, offer));
     });
 };

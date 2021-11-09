@@ -12,6 +12,8 @@ const addClassOrRemoveClass = (element, addOrRemove, className) => {
   element.classList[addOrRemove === 'add' ? 'add' : 'remove'](className);
 };
 
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
 // функция получения попапа ошибки отправки данных
 const getError = () => {
   main.appendChild(error);
@@ -19,8 +21,8 @@ const getError = () => {
   errorButton.addEventListener('click', () => {
     error.remove();
   });
-  body.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
+  body.addEventListener('keydown', () => {
+    if (isEscapeKey) {
       error.remove();
     }
   });
@@ -33,8 +35,8 @@ const getError = () => {
 const getSuccess = () => {
   main.appendChild(success);
   addClassOrRemoveClass(success, 'remove', 'hidden');
-  body.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
+  body.addEventListener('keydown', () => {
+    if (isEscapeKey) {
       success.remove();
     }
   });

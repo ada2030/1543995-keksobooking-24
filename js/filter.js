@@ -2,19 +2,13 @@ const formFilters = document.querySelector('.map__filters');
 const allFilters = formFilters.querySelectorAll('.map__filter');
 const featuresFilter = formFilters.querySelector('.map__features');
 const allCheckboxes = featuresFilter.querySelectorAll('input');
+
 const getFilterRank = (data) => {
   const typeFilter = formFilters.querySelector('[name="housing-type"]');
   const priceFilter = formFilters.querySelector('[name="housing-price"]');
   const roomsFilter = formFilters.querySelector('[name="housing-rooms"]');
   const guestsFilter = formFilters.querySelector('[name="housing-guests"]');
   const featuresItems = featuresFilter.querySelectorAll('input:checked');
-  const TypeTranslate = {
-    BUNGALOW: 'Бунгало',
-    FLAT: 'Квартира',
-    HOTEL: 'Отель',
-    HOUSE: 'Дом',
-    PALACE: 'Дворец',
-  };
   const PriceRange = {
     LOW: {
       MIN: 0,
@@ -30,13 +24,7 @@ const getFilterRank = (data) => {
     },
   };
   let rank = 0;
-  let typeTranslate;
-  for (const item in TypeTranslate) {
-    if (TypeTranslate[item] === data.offer.type) {
-      typeTranslate = item.toLowerCase();
-    }
-  }
-  if (typeTranslate === typeFilter.value) {
+  if (data.offer.type === typeFilter.value) {
     rank++;
   }
   let priceText;
