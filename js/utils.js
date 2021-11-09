@@ -14,6 +14,35 @@ const addClassOrRemoveClass = (element, addOrRemove, className) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+// функции удаления обработчиков событий
+// чет не получилось универсиализировать эти функции((, пусть пока так
+let handleKeydownError = () => {};
+const handleClickError = () => {
+  error.remove();
+  body.removeEventListener('click', handleClickError);
+  body.removeEventListener('keydown', handleKeydownError);
+};
+handleKeydownError = () => {
+  if (isEscapeKey) {
+    error.remove();
+    body.removeEventListener('keydown', handleKeydownError);
+    body.removeEventListener('click', handleClickError);
+  }
+};
+let handleKeydownSuccess = () => {};
+const handleClickSuccess = () => {
+  success.remove();
+  body.removeEventListener('click', handleClickSuccess);
+  body.removeEventListener('keydown', handleKeydownSuccess);
+};
+handleKeydownSuccess = () => {
+  if (isEscapeKey) {
+    success.remove();
+    body.removeEventListener('click', handleClickSuccess);
+    body.removeEventListener('keydown', handleKeydownSuccess);
+  }
+};
+
 // функция получения попапа ошибки отправки данных
 const getError = () => {
   main.appendChild(error);
@@ -21,28 +50,16 @@ const getError = () => {
   errorButton.addEventListener('click', () => {
     error.remove();
   });
-  body.addEventListener('keydown', () => {
-    if (isEscapeKey) {
-      error.remove();
-    }
-  });
-  body.addEventListener('click', () => {
-    error.remove();
-  });
+  body.addEventListener('keydown', handleKeydownError);
+  body.addEventListener('click', handleClickError);
 };
 
 // функция получения попапа успешной отправки данных
 const getSuccess = () => {
   main.appendChild(success);
   addClassOrRemoveClass(success, 'remove', 'hidden');
-  body.addEventListener('keydown', () => {
-    if (isEscapeKey) {
-      success.remove();
-    }
-  });
-  body.addEventListener('click', () => {
-    success.remove();
-  });
+  body.addEventListener('keydown', handleKeydownSuccess);
+  body.addEventListener('click', handleClickSuccess);
 };
 
 // функция получения сообщения ошибки получения данных
