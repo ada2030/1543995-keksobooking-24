@@ -45,7 +45,7 @@ const getFilterRank = (data) => {
   for (const featureData in data.offer.features) {
     featuresItems.forEach((item) => {
       if (data.offer.features[featureData] === item.value) {
-        rank += 0.5;
+        rank += 0.1;
       }
     });
   }
