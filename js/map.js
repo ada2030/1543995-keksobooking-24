@@ -70,7 +70,6 @@ const markerGroup = L.layerGroup().addTo(map);
 const paintMarker = (allData) => {
   markerGroup.clearLayers();
   allData
-    .slice()
     .sort(compareData)
     .slice(0, SIMILAR_WIZARD_COUNT)
     .forEach(({author, offer, location}) => {

@@ -49,7 +49,27 @@ const getFilterRank = (data) => {
       }
     });
   }
+  const filtersValues = [];
+  allFilters.forEach((item) => {
+    filtersValues.push(item.value);
+  });
+  if (filtersValues.every((elem) => elem === 'any') && featuresItems.length === 0) {
+    rank++;
+  }
   return rank;
+};
+
+const deleteData = (data) => {
+  const dataNoZeroRank = [];
+  data.forEach((item, index, object) => {
+    const rank = getFilterRank(item);
+    if (rank === 0) {
+      object.splice(index, 1);
+    } else {
+      dataNoZeroRank.push(item);
+    }
+  });
+  return dataNoZeroRank;
 };
 
 const compareData = (dataA, dataB) => {
@@ -71,4 +91,4 @@ const changeFilters = (cb) => {
   });
 };
 
-export {compareData, changeFilters};
+export {compareData, changeFilters, deleteData};
