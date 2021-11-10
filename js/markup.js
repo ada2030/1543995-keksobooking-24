@@ -16,6 +16,7 @@ const appendData = (author, offer) => {
   const popupCapacity = element.querySelector('.popup__text--capacity');
   const popupTime = element.querySelector('.popup__text--time');
   const popupFeatures = element.querySelector('.popup__features');
+  const popupFeaturesItems = popupFeatures.querySelectorAll('.popup__feature');
   const popupDescription = element.querySelector('.popup__description');
   const popupPhotos = element.querySelector('.popup__photos');
   const popupAvatar = element.querySelector('.popup__avatar');
@@ -57,7 +58,16 @@ const appendData = (author, offer) => {
   if (offer.features === undefined) {
     addClassOrRemoveClass(popupFeatures, 'add', 'hidden');
   } else {
-    popupFeatures.textContent = offer.features;
+    popupFeaturesItems.forEach((item) => {
+      addClassOrRemoveClass(item, 'add', 'hidden');
+    });
+    offer.features.forEach((itemData) => {
+      popupFeaturesItems.forEach((itemElement) => {
+        if(itemElement.className.indexOf(itemData) !== -1) {
+          addClassOrRemoveClass(itemElement, 'remove', 'hidden');
+        }
+      });
+    });
   }
   if (offer.description === undefined) {
     addClassOrRemoveClass(popupDescription, 'add', 'hidden');
