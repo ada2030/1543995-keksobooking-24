@@ -59,22 +59,22 @@ formButton.addEventListener('click', () => {
   }
 });
 
-// валидация тип жилья и цены до события
-for (const item in MinPriceByType) {
-  if (item.toLowerCase() === typeSelect.value) {
-    priceInput.min = MinPriceByType[item];
-    priceInput.placeholder = MinPriceByType[item];
-  }
-}
-
-// валидация тип жилья и цены при событии
-typeSelect.addEventListener('change', () => {
+// функция валидации поля цены
+const validatePrice = () => {
   for (const item in MinPriceByType) {
     if (item.toLowerCase() === typeSelect.value) {
       priceInput.min = MinPriceByType[item];
       priceInput.placeholder = MinPriceByType[item];
     }
   }
+};
+
+// валидация тип жилья и цены до события
+validatePrice();
+
+// валидация тип жилья и цены при событии
+typeSelect.addEventListener('change', () => {
+  validatePrice();
 });
 
 // валидация Время заезда и выезда
@@ -129,6 +129,7 @@ const getInitial = () => {
   formFilters.reset();
   resetMapAndMarker();
   getSuccess();
+  validatePrice();
 };
 
 // обработчик события для кнопки очистить
@@ -137,6 +138,7 @@ resetButton.addEventListener('click', (evt) => {
   form.reset();
   formFilters.reset();
   resetMapAndMarker();
+  validatePrice();
 });
 
 setUserFormSubmit(getInitial);
