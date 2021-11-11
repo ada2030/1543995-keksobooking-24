@@ -1,4 +1,4 @@
-import {addClassOrRemoveClass, getError, getSuccess} from './utils.js';
+import {addClassOrRemoveClass, getSuccessOrError} from './utils.js';
 import {sendData} from './api.js';
 import {resetMapAndMarker} from './map.js';
 const MIN_NAME_LENGTH = 30;
@@ -117,7 +117,7 @@ const setUserFormSubmit = (onSuccess) => {
     sendData(
       'https://24.javascript.pages.academy/keksobooking',
       () => onSuccess(),
-      () => getError(),
+      () => getSuccessOrError('error'),
       new FormData(evt.target),
     );
   });
@@ -128,7 +128,7 @@ const getInitial = () => {
   form.reset();
   formFilters.reset();
   resetMapAndMarker();
-  getSuccess();
+  getSuccessOrError('success');
   validatePrice();
 };
 
