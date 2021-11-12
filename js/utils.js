@@ -23,14 +23,8 @@ const getSuccessOrError = (successOrError) => {
     });
   }
   const eventHandler = (evt) => {
-    if (evt.type === 'keydown') {
-      const isEscapeKey = () => evt.key === 'Escape';
-      if (isEscapeKey()) {
-        successOrErrorExactly.remove();
-        body.removeEventListener('click', eventHandler);
-        body.removeEventListener('keydown', eventHandler);
-      }
-    } else {
+    const isEscapeKey = () => evt.key === 'Escape';
+    if (isEscapeKey() || evt.type === 'click') {
       successOrErrorExactly.remove();
       body.removeEventListener('click', eventHandler);
       body.removeEventListener('keydown', eventHandler);
