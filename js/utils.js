@@ -13,7 +13,7 @@ const addClassOrRemoveClass = (element, addOrRemove, className) => {
 };
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
-
+// Уважаемый проверяющий наставник, прошу обратить внимание в пункт 2.6 ТЗ, там написано "Сообщение должно исчезать по нажатию на клавишу Esc"
 // функция получения попапа успешной/ошибочной отправки данных
 const getSuccessOrError = (successOrError) => {
   const successOrErrorExactly = successOrError === 'error' ? error : success;

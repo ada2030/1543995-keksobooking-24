@@ -3,79 +3,85 @@ const allFilters = formFilters.querySelectorAll('.map__filter');
 const featuresFilter = formFilters.querySelector('.map__features');
 const allCheckboxes = featuresFilter.querySelectorAll('input');
 
-const getFilterRank = (data) => {
-  const typeFilter = formFilters.querySelector('[name="housing-type"]');
-  const priceFilter = formFilters.querySelector('[name="housing-price"]');
-  const roomsFilter = formFilters.querySelector('[name="housing-rooms"]');
-  const guestsFilter = formFilters.querySelector('[name="housing-guests"]');
-  const featuresItems = featuresFilter.querySelectorAll('input:checked');
-  const PriceRange = {
-    LOW: {
-      MIN: 0,
-      MAX: 10000,
-    },
-    MIDDLE: {
-      MIN: 10000,
-      MAX: 50000,
-    },
-    HIGH: {
-      MIN: 50000,
-      MAX: Infinity,
-    },
-  };
-  let rank = 0;
-  if (data.offer.type === typeFilter.value) {
-    rank++;
+const RENTS_MAX = 10;
+const DEFAULT_VALUE = 'any';
+const PriceLevel = {
+  LOW: {
+    MAX: 10000,
+  },
+  MIDDLE: {
+    MIN: 10000,
+    MAX: 50000,
+  },
+  HIGH: {
+    MIN: 50000,
+  },
+};
+
+const filterForm = document.querySelector('.map__filters');
+
+const filterType = (advertisement) => {
+  const typeValue = filterForm.querySelector('#housing-type').value;
+  return typeValue === advertisement.offer.type || typeValue === DEFAULT_VALUE;
+};
+
+const filterPrice = (advertisement) => {
+  const priceValue = filterForm.querySelector('#housing-price').value;
+  switch (priceValue) {
+    case 'low':
+      return advertisement.offer.price < PriceLevel.LOW.MAX;
+    case 'middle':
+      return advertisement.offer.price >= PriceLevel.MIDDLE.MIN && advertisement.offer.price < PriceLevel.MIDDLE.MAX;
+    case 'high':
+      return advertisement.offer.price >= PriceLevel.HIGH.MIN;
+    case DEFAULT_VALUE:
+      return true;
+    default: return false;
   }
-  let priceText;
-  for (const item in PriceRange) {
-    if (data.offer.price > PriceRange[item].MIN && data.offer.price < PriceRange[item].MAX) {
-      priceText = item.toLowerCase();
-    }
+};
+
+const filterRooms = (advertisement) => {
+  const roomsValue = filterForm.querySelector('#housing-rooms').value;
+  return roomsValue === advertisement.offer.rooms.toString() || roomsValue === DEFAULT_VALUE;
+};
+
+const filterGuests = (advertisement) => {
+  const guestsValue = filterForm.querySelector('#housing-guests').value;
+  return guestsValue === advertisement.offer.guests.toString() || guestsValue === DEFAULT_VALUE;
+};
+
+const filterFeatures = (advertisement) => {
+  const selectedFeatures = Array.from(filterForm.querySelectorAll('#housing-features input:checked'));
+  if (!advertisement.offer.features) {
+    return false;
   }
-  if (priceText === priceFilter.value) {
-    rank++;
-  }
-  if (data.offer.rooms === Number(roomsFilter.value)) {
-    rank++;
-  }
-  if (data.offer.guests === Number(guestsFilter.value)) {
-    rank++;
-  }
-  for (const featureData in data.offer.features) {
-    featuresItems.forEach((item) => {
-      if (data.offer.features[featureData] === item.value) {
-        rank += 0.1;
-      }
-    });
-  }
-  const filtersValues = [];
-  allFilters.forEach((item) => {
-    filtersValues.push(item.value);
-  });
-  if (filtersValues.every((elem) => elem === 'any') && featuresItems.length === 0) {
-    rank++;
-  }
-  return rank;
+  const featuresValues = selectedFeatures.map((element) => element.value);
+  const filter = featuresValues.filter((item) => advertisement.offer.features.includes(item));
+  return featuresValues.length === filter.length;
 };
 
 const deleteData = (data) => {
-  const dataNoZeroRank = [];
-  data.forEach((item, index, object) => {
-    const rank = getFilterRank(item);
-    if (rank === 0) {
-      object.splice(index, 1);
-    } else {
-      dataNoZeroRank.push(item);
-    }
-  });
-  return dataNoZeroRank;
-};
+  const getAllFilterInput = (advertisement) => {
+    const inputFiltres = [
+      filterType,
+      filterPrice,
+      filterRooms,
+      filterGuests,
+      filterFeatures,
+    ];
+    return inputFiltres.every((input) => input(advertisement));
+  };
 
-const compareData = (dataA, dataB) => {
-  const rankA = getFilterRank(dataA);
-  const rankB = getFilterRank(dataB);
-  return rankB - rankA;
+  const filteredRents = [];
+  for (const element of data) {
+    if (getAllFilterInput(element)) {
+      filteredRents.push(element);
+    }
+    if (filteredRents.length >= RENTS_MAX) {
+      break;
+    }
+  }
+  return filteredRents;
 };
 
 const changeFilters = (cb) => {
@@ -91,4 +97,4 @@ const changeFilters = (cb) => {
   });
 };
 
-export {compareData, changeFilters, deleteData};
+export {changeFilters, deleteData};

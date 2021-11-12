@@ -5,6 +5,7 @@ const templatePhoto = document.querySelector('#card').content.querySelector('.po
 const TypeTranslate = {BUNGALOW: 'Бунгало', FLAT: 'Квартира', HOTEL: 'Отель', HOUSE: 'Дом', PALACE: 'Дворец'};
 
 // функция ставки данных в шаблон
+// append это глагол
 const appendData = (author, offer) => {
   const element = template.cloneNode(true);
   const photoItem = templatePhoto.cloneNode(true);
@@ -23,15 +24,16 @@ const appendData = (author, offer) => {
   } else {
     element.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
   }
+  let advertType;
   for (const item in TypeTranslate) {
     if (item.toLowerCase() === offer.type) {
-      offer.type = TypeTranslate[item];
+      advertType = TypeTranslate[item];
     }
   }
   if (offer.type === undefined) {
     addClassOrRemoveClass(element.querySelector('.popup__type'), 'add', 'hidden');
   } else {
-    element.querySelector('.popup__type').textContent = offer.type;
+    element.querySelector('.popup__type').textContent = advertType;
   }
   if (offer.rooms === undefined || offer.guests === undefined) {
     addClassOrRemoveClass(element.querySelector('.popup__text--capacity'), 'add', 'hidden');
