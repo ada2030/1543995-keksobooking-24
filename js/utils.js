@@ -1,3 +1,5 @@
+import {activateForm, deactivateForm} from './form.js';
+
 const ALERT_SHOW_TIME = 5000;
 const body = document.querySelector('body');
 const main = document.querySelector('main');
@@ -17,6 +19,7 @@ const getSuccessOrError = (successOrError) => {
   const successOrErrorExactly = successOrError === 'error' ? error : success;
   main.appendChild(successOrErrorExactly);
   addClassOrRemoveClass(successOrErrorExactly, 'remove', 'hidden');
+  deactivateForm();
   if (successOrError === 'error') {
     errorButton.addEventListener('click', () => {
       error.remove();
@@ -28,6 +31,7 @@ const getSuccessOrError = (successOrError) => {
       successOrErrorExactly.remove();
       successOrErrorExactly.removeEventListener('click', eventHandler);
       body.removeEventListener('keydown', eventHandler);
+      activateForm();
     }
   };
   successOrErrorExactly.addEventListener('click', eventHandler);

@@ -86,15 +86,19 @@ timeOutSelect.addEventListener('change', () => {
 });
 
 // приведение форм в неактивное состояние
-addClassOrRemoveClass(form, 'add', 'ad-form--disabled');
-interactiveElements.forEach((element) => {
-  element.disabled = 'disabled';
-});
-addClassOrRemoveClass(formFilters, 'add', 'map__filters--disabled');
-mapFilters.forEach((element) => {
-  element.disabled = 'disabled';
-});
-mapFeatures.disabled = 'disabled';
+const deactivateForm = () => {
+  addClassOrRemoveClass(form, 'add', 'ad-form--disabled');
+  interactiveElements.forEach((element) => {
+    element.disabled = 'disabled';
+  });
+  addClassOrRemoveClass(formFilters, 'add', 'map__filters--disabled');
+  mapFilters.forEach((element) => {
+    element.disabled = 'disabled';
+  });
+  mapFeatures.disabled = 'disabled';
+};
+
+deactivateForm();
 
 // функция переключения формы в активное состояние
 const activateForm = () => {
@@ -143,4 +147,4 @@ resetButton.addEventListener('click', (evt) => {
 
 setUserFormSubmit(getInitial);
 
-export {activateForm};
+export {activateForm, deactivateForm};
