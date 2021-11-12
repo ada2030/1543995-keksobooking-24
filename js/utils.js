@@ -26,11 +26,11 @@ const getSuccessOrError = (successOrError) => {
     const isEscapeKey = () => evt.key === 'Escape';
     if (isEscapeKey() || evt.type === 'click') {
       successOrErrorExactly.remove();
-      body.removeEventListener('click', eventHandler);
+      successOrErrorExactly.removeEventListener('click', eventHandler);
       body.removeEventListener('keydown', eventHandler);
     }
   };
-  body.addEventListener('click', eventHandler);
+  successOrErrorExactly.addEventListener('click', eventHandler);
   body.addEventListener('keydown', eventHandler);
 };
 
