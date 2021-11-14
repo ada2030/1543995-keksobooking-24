@@ -5,7 +5,6 @@ const template = document.querySelector('#card').content.querySelector('.popup')
 const templatePhoto = document.querySelector('#card').content.querySelector('.popup__photo');
 
 // функция ставки данных в шаблон
-// append это глагол
 const appendData = (author, offer) => {
   const element = template.cloneNode(true);
   const photoItem = templatePhoto.cloneNode(true);
