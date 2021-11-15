@@ -6,6 +6,9 @@ const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
 const MinPriceByType = {BUNGALOW: 0, FLAT: 1000, HOTEL: 3000, HOUSE: 5000, PALACE: 10000};
 
+const previewAvatar = document.querySelector('.ad-form-header__preview img');
+const avatarSrc = previewAvatar.src;
+const previewHousing = document.querySelector('.ad-form__photo');
 const form = document.querySelector('.ad-form');
 const formButton = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
@@ -134,6 +137,8 @@ const getInitial = () => {
   resetMapAndMarker();
   getSuccessOrError('success');
   validatePrice();
+  previewAvatar.src = avatarSrc;
+  previewHousing.innerHTML = '';
 };
 
 // обработчик события для кнопки очистить
@@ -143,6 +148,8 @@ resetButton.addEventListener('click', (evt) => {
   formFilters.reset();
   resetMapAndMarker();
   validatePrice();
+  previewAvatar.src = avatarSrc;
+  previewHousing.innerHTML = '';
 });
 
 setUserFormSubmit(getInitial);
