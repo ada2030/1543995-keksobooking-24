@@ -6,24 +6,28 @@ const fileChooserHousing = document.querySelector('.ad-form__upload input[type=f
 const previewHousing = document.querySelector('.ad-form__photo');
 
 const appendPhoto = (fileChooser, preview) => {
-  fileChooser.addEventListener('change', () => {
-    const file = fileChooser.files[0];
-    const fileName = file.name.toLowerCase();
-    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
-    if (fileChooser === fileChooserHousing) {
-      const imgHousing = document.createElement('img');
-      imgHousing.style.width = '70px';
-      imgHousing.style.height = '70px';
-      preview.append(imgHousing);
-      preview = document.querySelector('.ad-form__photo img');
-    }
-    if (matches) {
-      preview.src = URL.createObjectURL(file);
-    }
-  });
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  if (fileChooser === fileChooserHousing) {
+    preview.innerHTML = '';
+    const imgHousing = document.createElement('img');
+    imgHousing.style.width = '70px';
+    imgHousing.style.height = '70px';
+    preview.append(imgHousing);
+    preview = document.querySelector('.ad-form__photo img');
+  }
+  if (matches) {
+    preview.src = URL.createObjectURL(file);
+  }
 };
 
-appendPhoto(fileChooserAvatar, previewAvatar);
-appendPhoto(fileChooserHousing, previewHousing);
+fileChooserAvatar.addEventListener('change', () => {
+  appendPhoto(fileChooserAvatar, previewAvatar);
+});
+
+fileChooserHousing.addEventListener('change', () => {
+  appendPhoto(fileChooserHousing, previewHousing);
+});
 
 
