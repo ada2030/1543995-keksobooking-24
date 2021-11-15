@@ -1,3 +1,5 @@
+import {activateForm, deactivateForm} from './form.js';
+
 const ALERT_SHOW_TIME = 5000;
 const body = document.querySelector('body');
 const main = document.querySelector('main');
@@ -12,33 +14,28 @@ const addClassOrRemoveClass = (element, addOrRemove, className) => {
   element.classList[addOrRemove === 'add' ? 'add' : 'remove'](className);
 };
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
-// Уважаемый проверяющий наставник, прошу обратить внимание в пункт 2.6 ТЗ, там написано "Сообщение должно исчезать по нажатию на клавишу Esc"
 // функция получения попапа успешной/ошибочной отправки данных
 const getSuccessOrError = (successOrError) => {
   const successOrErrorExactly = successOrError === 'error' ? error : success;
   main.appendChild(successOrErrorExactly);
   addClassOrRemoveClass(successOrErrorExactly, 'remove', 'hidden');
+  deactivateForm();
   if (successOrError === 'error') {
     errorButton.addEventListener('click', () => {
       error.remove();
     });
   }
-  let keydownHandler = () => {};
-  const clickHandler = () => {
-    successOrErrorExactly.remove();
-    body.removeEventListener('click', clickHandler);
-    body.removeEventListener('keydown', keydownHandler);
-  };
-  keydownHandler = () => {
-    if (isEscapeKey) {
+  const eventHandler = (evt) => {
+    const isEscapeKey = () => evt.key === 'Escape';
+    if (isEscapeKey() || evt.type === 'click') {
       successOrErrorExactly.remove();
-      body.removeEventListener('click', clickHandler);
-      body.removeEventListener('keydown', keydownHandler);
+      successOrErrorExactly.removeEventListener('click', eventHandler);
+      body.removeEventListener('keydown', eventHandler);
+      activateForm();
     }
   };
-  body.addEventListener('click', clickHandler);
-  body.addEventListener('keydown', keydownHandler);
+  successOrErrorExactly.addEventListener('click', eventHandler);
+  body.addEventListener('keydown', eventHandler);
 };
 
 // функция получения сообщения ошибки получения данных

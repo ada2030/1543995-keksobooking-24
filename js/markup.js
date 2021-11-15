@@ -1,11 +1,10 @@
 import {addClassOrRemoveClass} from './utils.js';
 
+const TypeTranslate = {BUNGALOW: 'Бунгало', FLAT: 'Квартира', HOTEL: 'Отель', HOUSE: 'Дом', PALACE: 'Дворец'};
 const template = document.querySelector('#card').content.querySelector('.popup');
 const templatePhoto = document.querySelector('#card').content.querySelector('.popup__photo');
-const TypeTranslate = {BUNGALOW: 'Бунгало', FLAT: 'Квартира', HOTEL: 'Отель', HOUSE: 'Дом', PALACE: 'Дворец'};
 
 // функция ставки данных в шаблон
-// append это глагол
 const appendData = (author, offer) => {
   const element = template.cloneNode(true);
   const photoItem = templatePhoto.cloneNode(true);
